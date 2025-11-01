@@ -11,9 +11,9 @@ warnings.filterwarnings('ignore')
 try:
     from .strategy import PairsStrategy, StrategyConfig, SignalType
     from .risk import RiskManager, RiskConfig
-except ImportError:
-    from strategy import PairsStrategy, StrategyConfig, SignalType
-    from risk import RiskManager, RiskConfig
+except ImportError:  # pragma: no cover
+    from strategy import PairsStrategy, StrategyConfig, SignalType  # noqa: F401
+    from risk import RiskManager, RiskConfig  # noqa: F401
 
 
 @dataclass

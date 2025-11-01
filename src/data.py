@@ -13,8 +13,8 @@ warnings.filterwarnings('ignore')
 
 try:
     from .utils import get_data_dir, validate_dataframe
-except ImportError:
-    from utils import get_data_dir, validate_dataframe
+except ImportError:  # pragma: no cover
+    from utils import get_data_dir, validate_dataframe  # noqa: F401
 
 
 class DataDownloader:
@@ -256,7 +256,7 @@ class DataDownloader:
         
         # Combine and forward-fill missing values
         df = pd.DataFrame(prices)
-        df = df.fillna(method='ffill').dropna()
+        df = df.ffill().dropna()
         
         return df
     

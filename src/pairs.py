@@ -5,7 +5,7 @@ Implements correlation analysis, cointegration testing, and pair ranking.
 import pandas as pd
 import numpy as np
 from typing import List, Tuple, Dict, Optional
-from statsmodels.tsa.stattools import coint
+from statsmodels.tsa.stattools import coint, adfuller
 from statsmodels.api import OLS, add_constant
 from scipy import stats
 import warnings
@@ -13,8 +13,8 @@ warnings.filterwarnings('ignore')
 
 try:
     from .utils import get_data_dir, get_results_dir
-except ImportError:
-    from utils import get_data_dir, get_results_dir
+except ImportError:  # pragma: no cover
+    from utils import get_data_dir, get_results_dir  # noqa: F401
 
 
 class PairSelector:
@@ -296,8 +296,6 @@ class PairSelector:
         Dict : Statistics about spread stability
         """
         # Test for stationarity using Augmented Dickey-Fuller
-        from statsmodels.tsa.stattools import adfuller
-        
         clean_spread = spread.dropna()
         
         if len(clean_spread) < 30:

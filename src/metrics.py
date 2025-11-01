@@ -10,8 +10,8 @@ import os
 
 try:
     from .utils import get_results_dir
-except ImportError:
-    from utils import get_results_dir
+except ImportError:  # pragma: no cover
+    from utils import get_results_dir  # noqa: F401
 
 
 def plot_equity_curve(
