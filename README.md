@@ -152,7 +152,7 @@ backtester.print_summary()
 
 ### Tear sheet
 
-![Performance Tear Sheet for SPY/DIA](results/tear_sheet_SPY_DIA.png)
+![Performance Tear Sheet for SPY/DIA](assets/tear_sheet_SPY_DIA.png)
 
 ### Parameter sensitivity (sample)
 
