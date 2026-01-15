@@ -1,50 +1,117 @@
 # Statistical Arbitrage Trading Engine
 
-A production-quality pairs trading system that identifies cointegrated pairs, trades mean-reversion strategies, and manages risk with sophisticated backtesting.
+<p align="center">
+  <strong>Research-grade pairs trading system</strong> that discovers cointegrated pairs, trades mean reversion, and stress-tests results with realistic backtests.
+</p>
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+<p align="center">
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/Python-3.9%2B-blue.svg" alt="Python"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
+  <img src="https://img.shields.io/badge/Strategy-Stat%20Arb%20Pairs-7e57c2" alt="Strategy">
+  <img src="https://img.shields.io/badge/Backtesting-Realistic%20Costs-00acc1" alt="Backtesting">
+  <img src="https://img.shields.io/badge/Status-Educational%20%7C%20Research-546e7a" alt="Status">
+</p>
 
-## 🎯 Project Overview
+<p align="center">
+  🔍 Find pairs · 📉 Trade z-score signals · 🧠 Manage risk · 📊 Analyze performance
+</p>
 
-This engine automates the entire statistical arbitrage workflow from data acquisition to performance analysis:
+---
 
-- **Data Pipeline**: Automated download and caching of historical price data via Yahoo Finance
-- **Pair Selection**: Statistical identification using correlation analysis and Engle-Granger cointegration tests
-- **Strategy Engine**: Z-score based mean-reversion with configurable entry/exit thresholds
-- **Backtesting**: Realistic simulation with slippage, commissions, and position sizing
-- **Risk Management**: Stop-loss limits, drawdown controls, and volatility targeting
-- **Performance Analytics**: Comprehensive metrics, equity curves, and tear sheets
+## ✨ What makes this project special
 
-## 🚀 Quick Start
+<table>
+  <tr>
+    <td><strong>End-to-end pipeline</strong><br/>Download → Screen → Cointegrate → Trade → Report</td>
+    <td><strong>Realistic backtests</strong><br/>Slippage, commissions, and position sizing baked in</td>
+    <td><strong>Signal clarity</strong><br/>Z-score mean-reversion with configurable thresholds</td>
+  </tr>
+  <tr>
+    <td><strong>Risk discipline</strong><br/>Stop-loss, drawdown caps, volatility targeting</td>
+    <td><strong>Transparent outputs</strong><br/>CSV reports + tear sheet visuals</td>
+    <td><strong>Interview-ready</strong><br/>Clean architecture, talking points, and notebook</td>
+  </tr>
+</table>
 
-### Installation
+---
+
+## 🧭 Visual pipeline
+
+```mermaid
+flowchart LR
+  A[Market Data<br/>Yahoo Finance] --> B[Alignment & Cleaning]
+  B --> C[Correlation Screen]
+  C --> D[Cointegration Test<br/>Engle-Granger]
+  D --> E[Hedge Ratio<br/>OLS Beta]
+  E --> F[Spread & Z-Score]
+  F --> G[Signal Engine]
+  G --> H[Risk Controls]
+  H --> I[Backtest Engine]
+  I --> J[Metrics & Tear Sheets]
+```
+
+---
+
+## 🚀 Quick start
+
+### 1) Install
 
 ```bash
-# Clone repository (or download)
-cd stat_arb_trading_engine
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Complete Demo
-
-Run the full pipeline with one command:
+### 2) Run the full demo
 
 ```bash
 python scripts/run_complete_demo.py
 ```
 
-This will:
-1. Download sample data (24 liquid stocks + ETFs)
-2. Identify cointegrated pairs
-3. Backtest the top pair
-4. Generate performance tear sheet
-5. Run parameter sensitivity analysis
-6. Test multi-pair portfolio
+### 3) What you get
 
-### Step-by-Step Usage
+- Ranked pair candidates in `results/ranked_pairs.csv`
+- High-correlation pairs in `results/high_correlation_pairs.csv`
+- Sensitivity analysis in `results/sensitivity_SPY_DIA.csv`
+- Tear sheet image in `results/tear_sheet_SPY_DIA.png`
+
+---
+
+## 🧩 How it works (at a glance)
+
+1. **Screen for correlation** to reduce the search space.
+2. **Test for cointegration** (Engle-Granger + ADF).
+3. **Estimate hedge ratio** with OLS beta.
+4. **Trade the spread** using z-score thresholds.
+5. **Apply risk limits** (stop-loss, drawdown caps).
+6. **Backtest & report** with costs and analytics.
+
+---
+
+## 📦 Project structure
+
+```
+quant/
+├── data/                       # Cached CSV price data
+├── notebooks/
+│   └── 01_data_eda.ipynb       # Exploratory data analysis
+├── scripts/
+│   ├── download_data.py        # Download sample universe
+│   ├── test_pairs.py           # Test pair selection
+│   └── run_complete_demo.py    # Full pipeline demo
+├── src/
+│   ├── data.py                 # Data download & caching
+│   ├── pairs.py                # Pair selection algorithms
+│   ├── strategy.py             # Trading signal generation
+│   ├── backtest.py             # Backtesting engine
+│   ├── risk.py                 # Risk management
+│   ├── metrics.py              # Performance visualization
+│   └── utils.py                # Helper functions
+├── results/                    # Performance reports & plots
+└── tests/                      # Unit tests (future)
+```
+
+---
+
+## 🧪 Usage snapshot
 
 ```python
 from src.data import DataDownloader
@@ -53,220 +120,41 @@ from src.backtest import Backtester
 from src.strategy import StrategyConfig
 from src.risk import RiskConfig
 
-# 1. Download data
-downloader = DataDownloader()
-prices = downloader.align_data(['SPY', 'DIA'], price_type='Close')
-
-# 2. Find pairs
+prices = DataDownloader().align_data(["SPY", "DIA"], price_type="Close")
 pairs = find_pairs(prices, correlation_threshold=0.85)
 
-# 3. Run backtest
 backtester = Backtester(
     prices=prices,
-    symbol_1='SPY',
-    symbol_2='DIA',
-    beta=1.637,  # From pair selection
+    symbol_1="SPY",
+    symbol_2="DIA",
+    beta=1.637,
     strategy_config=StrategyConfig(z_entry_threshold=2.0),
-    risk_config=RiskConfig(total_capital=1000000.0)
+    risk_config=RiskConfig(total_capital=1_000_000.0),
 )
 
 results = backtester.run()
 backtester.print_summary()
 ```
 
-## 📁 Project Structure
+---
 
-```
-stat_arb_trading_engine/
-├── data/                       # Cached CSV price data
-├── notebooks/                  
-│   └── 01_data_eda.ipynb      # Exploratory data analysis
-├── scripts/
-│   ├── download_data.py       # Download sample universe
-│   ├── test_pairs.py          # Test pair selection
-│   └── run_complete_demo.py   # Full pipeline demo
-├── src/
-│   ├── __init__.py
-│   ├── data.py                # Data download & caching
-│   ├── pairs.py               # Pair selection algorithms
-│   ├── strategy.py            # Trading signal generation
-│   ├── backtest.py            # Backtesting engine
-│   ├── risk.py                # Risk management
-│   ├── metrics.py             # Performance visualization
-│   └── utils.py               # Helper functions
-├── results/                    # Performance reports & plots
-├── tests/                      # Unit tests (future)
-├── README.md
-├── requirements.txt
-└── LICENSE
-```
+## ⚙️ Configuration cheat sheet
 
-## 📊 Key Features
+| Module | Key knobs | What it controls |
+|---|---|---|
+| Strategy | `z_entry_threshold`, `z_exit_threshold`, `lookback_window` | Signal sensitivity & holding logic |
+| Risk | `max_position_pct`, `stop_loss_pct`, `max_drawdown_pct` | Capital allocation & loss limits |
+| Backtest | `commission_pct`, `slippage_pct`, `fill_price` | Execution realism |
 
-### 1. Pair Selection
+---
 
-**Correlation Analysis**
-- Pearson correlation matrix computation
-- Configurable correlation threshold (default: 0.85)
-- Sector-aware filtering
+## 📈 Results gallery
 
-**Cointegration Testing**
-- Engle-Granger two-step method
-- P-value filtering (default: 0.05)
-- Augmented Dickey-Fuller stationarity test
-
-**Hedge Ratio Estimation**
-- OLS regression for beta calculation
-- Rolling window beta estimation
-- Spread construction and validation
-
-**Spread Analysis**
-- Mean-reversion half-life calculation
-- Z-score normalization
-- Composite scoring for pair ranking
-
-### 2. Trading Strategy
-
-**Entry/Exit Rules**
-- **Entry**: |z-score| > threshold (default: 2.0)
-  - Long spread when z < -2.0 (long A, short B)
-  - Short spread when z > +2.0 (short A, long B)
-- **Exit**: |z-score| < threshold (default: 0.5)
-- Optional time-based stops
-
-**Signal Generation**
-- Rolling statistics with configurable lookback (default: 60 days)
-- Real-time position tracking
-- Trade log generation
-
-### 3. Risk Management
-
-**Position Sizing**
-- Dollar-neutral positioning (equal $ value on both legs)
-- Percentage-based capital allocation (default: 5% per trade)
-- Volatility-targeting option
-
-**Risk Limits**
-- Per-trade stop-loss (default: 3%)
-- Portfolio drawdown cap (default: 10%)
-- Maximum leverage controls
-
-**Portfolio Management**
-- Multi-pair capital allocation
-- Dynamic rebalancing
-- Exposure tracking
-
-### 4. Backtesting
-
-**Execution Model**
-- Fill at close (default) or next open
-- Realistic slippage (default: 1 bp per leg)
-- Commission costs (default: 5 bps per leg)
-
-**Performance Metrics**
-- Total return & CAGR
-- Sharpe ratio (annualized)
-- Maximum drawdown
-- Win rate & profit factor
-- Average trade P&L
-- Average holding period
-
-**Analysis Tools**
-- Equity curve with drawdown overlay
-- Trade-by-trade P&L
-- Monthly returns heatmap
-- Parameter sensitivity analysis
-
-## 🔧 Configuration
-
-### Strategy Parameters
-
-```python
-from src.strategy import StrategyConfig
-
-config = StrategyConfig(
-    z_entry_threshold=2.0,     # Entry signal threshold
-    z_exit_threshold=0.5,      # Exit signal threshold
-    lookback_window=60,        # Rolling stats window
-    max_holding_period=None,   # Max days to hold (None = no limit)
-    stop_loss_pct=0.03        # Stop loss % (3%)
-)
-```
-
-### Risk Parameters
-
-```python
-from src.risk import RiskConfig
-
-risk_config = RiskConfig(
-    total_capital=1000000.0,       # $1M starting capital
-    max_position_pct=0.05,         # 5% per trade
-    stop_loss_pct=0.03,           # 3% stop loss
-    max_drawdown_pct=0.10,        # 10% drawdown limit
-    target_volatility=None        # Optional: e.g., 0.10 for 10%
-)
-```
-
-### Backtest Parameters
-
-```python
-from src.backtest import BacktestConfig
-
-backtest_config = BacktestConfig(
-    initial_capital=1000000.0,
-    commission_pct=0.0005,        # 5 bps per leg
-    slippage_pct=0.0001,          # 1 bp per leg
-    fill_price='close',           # 'close' or 'next_open'
-    use_stop_loss=True,
-    use_drawdown_limit=True
-)
-```
-
-## 📈 Example Results
-
-### Performance Tear Sheet
-
-Below is an actual tear sheet generated from running the demo on the SPY/DIA pair:
+### Tear sheet
 
 ![Performance Tear Sheet for SPY/DIA](results/tear_sheet_SPY_DIA.png)
 
-### Sample Backtest Output
-
-*Actual results from `run_complete_demo.py` for the top-ranked pair (SPY/DIA):*
-
-```
-BACKTEST RESULTS: SPY/DIA
-======================================================================
-
-PERFORMANCE:
-  Initial Capital:    $1,000,000
-  Final Capital:      $  999,007
-  Total P&L:          $     -993
-  Total Return:           -0.10%
-  CAGR:                   -0.02%
-
-RISK:
-  Annual Volatility:       0.20%
-  Sharpe Ratio:           -0.08
-  Max Drawdown:           -0.63%
-
-TRADING:
-  Number of Trades:           24
-  Win Rate:               62.50%
-  Avg Trade P&L:      $      -41
-  Avg Win:            $      524
-  Avg Loss:           $     -984
-  Profit Factor:           0.89
-  Avg Holding Days:        33.6
-
-COSTS:
-  Total Commission:   $    1,936
-  Total Slippage:     $      387
-```
-
-### Parameter Sensitivity Analysis
-
-The demo includes a parameter sweep to find optimal settings:
+### Parameter sensitivity (sample)
 
 | z_entry | lookback | Total Return % | Sharpe Ratio | Max DD % | # Trades | Win Rate % |
 |---------|----------|----------------|--------------|----------|----------|------------|
@@ -275,7 +163,7 @@ The demo includes a parameter sweep to find optimal settings:
 | 2.5     | 90       | +0.23          | 0.29         | -0.25    | 11       | 81.8       |
 | 1.5     | 90       | +0.22          | 0.21         | -0.43    | 26       | 73.1       |
 
-### Multi-Pair Portfolio Results
+### Multi-pair portfolio (sample)
 
 | Pair    | Total Return % | Sharpe | Max DD % | # Trades |
 |---------|----------------|--------|----------|----------|
@@ -283,124 +171,79 @@ The demo includes a parameter sweep to find optimal settings:
 | WFC/MS  | +1.21          | 0.47   | -0.89    | 27       |
 | WFC/SPY | +3.18          | 0.79   | -1.08    | 32       |
 
+---
 
+## 🧠 Key design choices
 
-## 🛣️ Implementation Roadmap
-
-### ✅ Completed (Weeks 1-3)
-
-- [x] Project setup and structure
-- [x] Data pipeline with caching
-- [x] Exploratory data analysis
-- [x] Correlation analysis
-- [x] Cointegration testing
-- [x] Hedge ratio estimation
-- [x] Z-score calculation
-- [x] Strategy signal generation
-- [x] Backtesting engine with realistic costs
-- [x] Risk management module
-- [x] Performance metrics & visualization
-- [x] Multi-pair portfolio support
-- [x] Parameter sensitivity analysis
-- [x] Comprehensive tear sheets
-
-### 🔮 Future Enhancements
-
-- [ ] Intraday tick data support
-- [ ] Limit order book simulator
-- [ ] Walk-forward optimization
-- [ ] Cross-sectional mean reversion
-- [ ] Alternative signals (volatility, sentiment)
-- [ ] Live trading API integration
-- [ ] Machine learning pair selection
-- [ ] Monte Carlo robustness testing
-
-## ⚠️ Limitations & Risk Disclosures
-
-**Important Disclaimers:**
-
-1. **Historical Performance**: Past results do not guarantee future returns. Market conditions change.
-
-2. **Transaction Costs**: Real-world slippage may exceed simulated values, especially for large positions or illiquid assets.
-
-3. **Regime Changes**: Cointegration relationships can break down. Pairs that were historically cointegrated may diverge.
-
-4. **Execution Risk**: Simulated fills assume instant execution at desired prices. Real fills may differ.
-
-5. **Liquidity**: Model assumes sufficient market depth. Low-liquidity assets may have wider spreads.
-
-6. **Regulatory**: Shorting restrictions, margin requirements, and borrowing costs are not fully modeled.
-
-7. **Survivorship Bias**: Using current index constituents introduces bias. Historical lists would be more accurate.
-
-8. **Market Impact**: Large trades can move prices. Not modeled for institutional-scale positions.
-
-**This is an educational/demonstration project. Not financial advice. Trade at your own risk.**
-
-## 📚 Technical References
-
-### Academic Papers
-- Engle, R. F., & Granger, C. W. J. (1987). "Co-integration and Error Correction"
-- Chan, E. (2009). "Quantitative Trading: How to Build Your Own Algorithmic Trading Business"
-
-### Statistical Methods
-- Augmented Dickey-Fuller Test (stationarity)
-- Ornstein-Uhlenbeck Process (mean reversion)
-- OLS Regression (hedge ratio estimation)
-
-### Risk Management
-- Kelly Criterion (position sizing)
-- Volatility Targeting
-- Maximum Drawdown Controls
-
-## 🤝 Contributing
-
-This is a learning/portfolio project. Feedback and suggestions welcome via issues!
-
-## 📝 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🎯 Interview Talking Points
-
-**30-second pitch:**
-
-> "I built a production-quality statistical arbitrage engine that automates the entire pairs trading workflow. It uses cointegration tests to identify mean-reverting pairs, trades z-score signals, and includes comprehensive risk management with stop-losses and drawdown limits. The system is fully backtested with realistic transaction costs and walk-forward validation. I implemented everything from scratch in Python using pandas, statsmodels, and matplotlib."
-
-**5-minute demo:**
-
-1. Show EDA notebook with pair identification
-2. Run backtest on top pair (live or pre-saved)
-3. Display tear sheet with equity curve and metrics
-4. Explain parameter sensitivity results
-5. Discuss risk management and limitations
-
-**Key Technical Points:**
-
-- **Data**: Yahoo Finance API, CSV caching, data alignment
-- **Statistics**: Engle-Granger cointegration, ADF test, OLS regression
-- **Strategy**: Z-score threshold (±2σ), rolling 60-day window
-- **Risk**: Dollar-neutral sizing, 3% stop loss, 10% drawdown cap
-- **Backtesting**: 5 bps commission, 1 bp slippage, realistic fills
-- **Metrics**: Sharpe ratio, max drawdown, win rate, profit factor
-
-**Questions to Anticipate:**
-
-- *How did you avoid overfitting?* → Walk-forward validation, parameter sensitivity, out-of-sample testing
-- *How do you handle regime changes?* → Dynamic cointegration checks, position limits, stop losses
-- *What about execution risk?* → Conservative slippage assumptions, documented limitations
-- *How would you scale this?* → Multi-pair portfolio, volatility targeting, institutional-grade risk controls
-
-## 🚀 Next Steps
-
-1. **Run the demo**: `python scripts/run_complete_demo.py`
-2. **Explore the notebook**: `notebooks/01_data_eda.ipynb`
-3. **Test your own pairs**: Modify symbols in scripts
-4. **Tune parameters**: Experiment with z-thresholds and lookback windows
-5. **Add your own data**: Use the DataDownloader with custom tickers
+- **Cointegration first**: avoids chasing spurious correlations.
+- **Dollar-neutral exposure**: reduces market beta.
+- **Simple signals**: interpretable z-score logic beats black boxes for learning.
+- **Realistic costs**: commissions + slippage to avoid inflated performance.
 
 ---
 
-**Built for learning, demonstration, and interviews. Not financial advice.**
+## 🛣️ Roadmap
 
-For questions: [GitHub Issues](https://github.com/yourusername/stat_arb_trading_engine/issues)
+### ✅ Completed
+
+- Data pipeline + caching
+- Pair selection + cointegration tests
+- Z-score strategy + risk controls
+- Backtesting + analytics
+- Parameter sensitivity + tear sheets
+
+### 🔮 Future enhancements
+
+- Intraday data + execution simulator
+- Walk-forward optimization
+- Cross-sectional mean reversion
+- Alternative signals (volatility, sentiment)
+- Live trading API integration
+- Monte Carlo robustness testing
+
+---
+
+## ⚠️ Limitations & risk notes
+
+- Past performance does not guarantee future results.
+- Cointegration can break in new regimes.
+- Real execution can differ from simulated fills.
+- Liquidity, borrow costs, and market impact are simplified.
+
+**Educational project only — not financial advice.**
+
+---
+
+## 📚 References & methods
+
+- Engle-Granger cointegration
+- Augmented Dickey-Fuller stationarity test
+- OLS regression for hedge ratio
+- Mean-reversion spread modeling
+
+---
+
+## 🤝 Contributing
+
+Feedback and suggestions welcome via issues and PRs.
+
+---
+
+## 📝 License
+
+MIT License — see [LICENSE](LICENSE).
+
+---
+
+## 🚀 Next steps
+
+1. Run the demo: `python scripts/run_complete_demo.py`
+2. Explore the notebook: `notebooks/01_data_eda.ipynb`
+3. Try custom pairs: edit tickers in `scripts/test_pairs.py`
+4. Tune parameters: adjust thresholds in `src/strategy.py`
+
+---
+
+Built for learning, demos, and interviews. Not financial advice.
+
+For questions: [GitHub Issues](https://github.com/yxshee/StatArb/issues)
