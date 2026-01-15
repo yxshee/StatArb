@@ -224,7 +224,15 @@ backtest_config = BacktestConfig(
 
 ## 📈 Example Results
 
-*Typical backtest results for a cointegrated pair (e.g., SPY/DIA):*
+### Performance Tear Sheet
+
+Below is an actual tear sheet generated from running the demo on the SPY/DIA pair:
+
+![Performance Tear Sheet for SPY/DIA](results/tear_sheet_SPY_DIA.png)
+
+### Sample Backtest Output
+
+*Actual results from `run_complete_demo.py` for the top-ranked pair (SPY/DIA):*
 
 ```
 BACKTEST RESULTS: SPY/DIA
@@ -232,23 +240,50 @@ BACKTEST RESULTS: SPY/DIA
 
 PERFORMANCE:
   Initial Capital:    $1,000,000
-  Final Capital:      $1,150,000  (example)
-  Total P&L:          $150,000
-  Total Return:       15.00%
-  CAGR:               7.50%
+  Final Capital:      $  999,007
+  Total P&L:          $     -993
+  Total Return:           -0.10%
+  CAGR:                   -0.02%
 
 RISK:
-  Annual Volatility:  12.00%
-  Sharpe Ratio:       0.75
-  Max Drawdown:       -8.50%
+  Annual Volatility:       0.20%
+  Sharpe Ratio:           -0.08
+  Max Drawdown:           -0.63%
 
 TRADING:
-  Number of Trades:   45
-  Win Rate:           62.22%
-  Avg Trade P&L:      $3,333
-  Profit Factor:      1.85
-  Avg Holding Days:   15.5
+  Number of Trades:           24
+  Win Rate:               62.50%
+  Avg Trade P&L:      $      -41
+  Avg Win:            $      524
+  Avg Loss:           $     -984
+  Profit Factor:           0.89
+  Avg Holding Days:        33.6
+
+COSTS:
+  Total Commission:   $    1,936
+  Total Slippage:     $      387
 ```
+
+### Parameter Sensitivity Analysis
+
+The demo includes a parameter sweep to find optimal settings:
+
+| z_entry | lookback | Total Return % | Sharpe Ratio | Max DD % | # Trades | Win Rate % |
+|---------|----------|----------------|--------------|----------|----------|------------|
+| 2.0     | 90       | +0.55          | 0.55         | -0.31    | 20       | 80.0       |
+| 1.5     | 60       | +0.50          | 0.32         | -0.81    | 40       | 75.0       |
+| 2.5     | 90       | +0.23          | 0.29         | -0.25    | 11       | 81.8       |
+| 1.5     | 90       | +0.22          | 0.21         | -0.43    | 26       | 73.1       |
+
+### Multi-Pair Portfolio Results
+
+| Pair    | Total Return % | Sharpe | Max DD % | # Trades |
+|---------|----------------|--------|----------|----------|
+| SPY/DIA | -0.09          | -0.08  | -0.62    | 24       |
+| WFC/MS  | +1.21          | 0.47   | -0.89    | 27       |
+| WFC/SPY | +3.18          | 0.79   | -1.08    | 32       |
+
+
 
 ## 🛣️ Implementation Roadmap
 
